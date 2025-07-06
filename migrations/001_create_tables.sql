@@ -1,0 +1,29 @@
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    nik VARCHAR(20) UNIQUE NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE cars (
+    car_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    stock INTEGER NOT NULL DEFAULT 0,
+    daily_rent DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE rentals (
+    rental_id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES customers(customer_id) ON DELETE CASCADE,
+    car_id INTEGER REFERENCES cars(car_id) ON DELETE CASCADE,
+    start_rent DATE NOT NULL,
+    end_rent DATE NOT NULL,
+    total_cost DECIMAL(10,2) NOT NULL,
+    finished BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
