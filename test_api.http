@@ -1,0 +1,77 @@
+### Health Check
+GET http://localhost:8080/health
+
+### Get All Customers
+GET http://localhost:8080/api/v1/customers
+
+### Create Customer
+POST http://localhost:8080/api/v1/customers
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "nik": "1234567890123456",
+    "phone_number": "081234567890"
+}
+
+### Get Customer by ID
+GET http://localhost:8080/api/v1/customers/1
+
+### Update Customer
+PUT http://localhost:8080/api/v1/customers/1
+Content-Type: application/json
+
+{
+    "name": "John Doe Updated",
+    "nik": "1234567890123456",
+    "phone_number": "081234567899"
+}
+
+### Delete Customer
+DELETE http://localhost:8080/api/v1/customers/21
+
+### Get All Cars
+GET http://localhost:8080/api/v1/cars
+
+### Create Car
+POST http://localhost:8080/api/v1/cars
+Content-Type: application/json
+
+{
+    "name": "Honda HR-V",
+    "stock": 2,
+    "daily_rent": 650000.00
+}
+
+### Get Available Cars
+GET http://localhost:8080/api/v1/cars/available
+
+### Get All Rentals
+GET http://localhost:8080/api/v1/rentals
+
+### Create Rental
+POST http://localhost:8080/api/v1/rentals
+Content-Type: application/json
+
+{
+    "customer_id": 1,
+    "car_id": 1,
+    "start_rent": "2024-01-01",
+    "end_rent": "2024-01-03"
+}
+
+### Get Active Rentals
+GET http://localhost:8080/api/v1/rentals/active
+
+### Update Rental (Mark as finished)
+PUT http://localhost:8080/api/v1/rentals/1
+Content-Type: application/json
+
+{
+    "customer_id": 1,
+    "car_id": 1,
+    "start_rent": "2024-01-01",
+    "end_rent": "2024-01-03",
+    "total_cost": 1000000.00,
+    "finished": true
+}
