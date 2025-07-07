@@ -19,13 +19,23 @@ func (r *RentalRepository) Create(rental *models.Rental) error {
 
 func (r *RentalRepository) GetAll() ([]models.Rental, error) {
     var rentals []models.Rental
-    err := r.db.Preload("Customer").Preload("Car").Find(&rentals).Error
+    err := r.db.Preload("Customer").
+        Preload("Customer.Membership").
+        Preload("Car").
+        Preload("BookingType").
+        Preload("Driver").
+        Find(&rentals).Error
     return rentals, err
 }
 
 func (r *RentalRepository) GetByID(id int) (*models.Rental, error) {
     var rental models.Rental
-    err := r.db.Preload("Customer").Preload("Car").First(&rental, id).Error
+    err := r.db.Preload("Customer").
+        Preload("Customer.Membership").
+        Preload("Car").
+        Preload("BookingType").
+        Preload("Driver").
+        First(&rental, id).Error
     if err != nil {
         return nil, err
     }
@@ -42,12 +52,24 @@ func (r *RentalRepository) Delete(id int) error {
 
 func (r *RentalRepository) GetByCustomerID(customerID int) ([]models.Rental, error) {
     var rentals []models.Rental
-    err := r.db.Preload("Customer").Preload("Car").Where("customer_id = ?", customerID).Find(&rentals).Error
+    err := r.db.Preload("Customer").
+        Preload("Customer.Membership").
+        Preload("Car").
+        Preload("BookingType").
+        Preload("Driver").
+        Where("customer_id = ?", customerID).
+        Find(&rentals).Error
     return rentals, err
 }
 
 func (r *RentalRepository) GetActiveRentals() ([]models.Rental, error) {
     var rentals []models.Rental
-    err := r.db.Preload("Customer").Preload("Car").Where("finished = false").Find(&rentals).Error
+    err := r.db.Preload("Customer").
+        Preload("Customer.Membership").
+        Preload("Car").
+        Preload("BookingType").
+        Preload("Driver").
+        Where("finished = false").
+        Find(&rentals).Error
     return rentals, err
 }

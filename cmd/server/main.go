@@ -26,19 +26,31 @@ func main() {
 	customerRepo := repositories.NewCustomerRepository(db)
 	carRepo := repositories.NewCarRepository(db)
 	rentalRepo := repositories.NewRentalRepository(db)
+	membershipRepo := repositories.NewMembershipRepository(db)
+	bookingTypeRepo := repositories.NewBookingTypeRepository(db)
+	driverRepo := repositories.NewDriverRepository(db)
+	driverIncentiveRepo := repositories.NewDriverIncentiveRepository(db)
 
 	// Initialize services
 	customerService := services.NewCustomerService(customerRepo)
 	carService := services.NewCarService(carRepo)
-	rentalService := services.NewRentalService(rentalRepo, customerRepo, carRepo)
+	membershipService := services.NewMembershipService(membershipRepo)
+	bookingTypeService := services.NewBookingTypeService(bookingTypeRepo)
+	driverService := services.NewDriverService(driverRepo)
+	driverIncentiveService := services.NewDriverIncentiveService(driverIncentiveRepo, rentalRepo, carRepo)
+	rentalService := services.NewRentalService(rentalRepo, customerRepo, carRepo, bookingTypeRepo, driverRepo, driverIncentiveService, membershipRepo)
 
 	// Initialize handlers
 	customerHandler := handlers.NewCustomerHandler(customerService)
 	carHandler := handlers.NewCarHandler(carService)
 	rentalHandler := handlers.NewRentalHandler(rentalService)
+	membershipHandler := handlers.NewMembershipHandler(membershipService)
+	bookingTypeHandler := handlers.NewBookingTypeHandler(bookingTypeService)
+	driverHandler := handlers.NewDriverHandler(driverService)
+	driverIncentiveHandler := handlers.NewDriverIncentiveHandler(driverIncentiveService)
 
 	// Setup routes
-	router := setupRoutes(customerHandler, carHandler, rentalHandler)
+	router := setupRoutes(customerHandler, carHandler, rentalHandler, membershipHandler, bookingTypeHandler, driverHandler, driverIncentiveHandler)
 
 	// Start server
 	log.Printf("Server starting on port %s", cfg.Port)
@@ -47,7 +59,15 @@ func main() {
 	}
 }
 
-func setupRoutes(customerHandler *handlers.CustomerHandler, carHandler *handlers.CarHandler, rentalHandler *handlers.RentalHandler) *gin.Engine {
+func setupRoutes(
+	customerHandler *handlers.CustomerHandler,
+	carHandler *handlers.CarHandler,
+	rentalHandler *handlers.RentalHandler,
+	membershipHandler *handlers.MembershipHandler,
+	bookingTypeHandler *handlers.BookingTypeHandler,
+	driverHandler *handlers.DriverHandler,
+	driverIncentiveHandler *handlers.DriverIncentiveHandler,
+) *gin.Engine {
 	router := gin.Default()
 
 	// Add CORS middleware
@@ -105,6 +125,46 @@ func setupRoutes(customerHandler *handlers.CustomerHandler, carHandler *handlers
 			rentals.PUT("/:id", rentalHandler.UpdateRental)
 			rentals.DELETE("/:id", rentalHandler.DeleteRental)
 			rentals.GET("/active", rentalHandler.GetActiveRentals)
+		}
+
+		// Membership routes
+		memberships := v1.Group("/memberships")
+		{
+			memberships.POST("", membershipHandler.CreateMembership)
+			memberships.GET("", membershipHandler.GetAllMemberships)
+			memberships.GET("/:id", membershipHandler.GetMembershipByID)
+			memberships.PUT("/:id", membershipHandler.UpdateMembership)
+			memberships.DELETE("/:id", membershipHandler.DeleteMembership)
+		}
+
+		// Booking Type routes
+		bookingTypes := v1.Group("/booking-types")
+		{
+			bookingTypes.POST("", bookingTypeHandler.CreateBookingType)
+			bookingTypes.GET("", bookingTypeHandler.GetAllBookingTypes)
+			bookingTypes.GET("/:id", bookingTypeHandler.GetBookingTypeByID)
+			bookingTypes.PUT("/:id", bookingTypeHandler.UpdateBookingType)
+			bookingTypes.DELETE("/:id", bookingTypeHandler.DeleteBookingType)
+		}
+
+		// Driver routes
+		drivers := v1.Group("/drivers")
+		{
+			drivers.POST("", driverHandler.CreateDriver)
+			drivers.GET("", driverHandler.GetAllDrivers)
+			drivers.GET("/:id", driverHandler.GetDriverByID)
+			drivers.PUT("/:id", driverHandler.UpdateDriver)
+			drivers.DELETE("/:id", driverHandler.DeleteDriver)
+		}
+
+		// Driver Incentive routes
+		driverIncentives := v1.Group("/driver-incentives")
+		{
+			driverIncentives.POST("", driverIncentiveHandler.CreateDriverIncentive)
+			driverIncentives.GET("", driverIncentiveHandler.GetAllDriverIncentives)
+			driverIncentives.GET("/:id", driverIncentiveHandler.GetDriverIncentiveByID)
+			driverIncentives.PUT("/:id", driverIncentiveHandler.UpdateDriverIncentive)
+			driverIncentives.DELETE("/:id", driverIncentiveHandler.DeleteDriverIncentive)
 		}
 	}
 

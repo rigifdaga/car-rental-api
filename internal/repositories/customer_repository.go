@@ -19,13 +19,13 @@ func (r *CustomerRepository) Create(customer *models.Customer) error {
 
 func (r *CustomerRepository) GetAll() ([]models.Customer, error) {
     var customers []models.Customer
-    err := r.db.Find(&customers).Error
+    err := r.db.Preload("Membership").Find(&customers).Error
     return customers, err
 }
 
 func (r *CustomerRepository) GetByID(id int) (*models.Customer, error) {
     var customer models.Customer
-    err := r.db.First(&customer, id).Error
+    err := r.db.Preload("Membership").First(&customer, id).Error
     if err != nil {
         return nil, err
     }
@@ -42,7 +42,7 @@ func (r *CustomerRepository) Delete(id int) error {
 
 func (r *CustomerRepository) GetByNIK(nik string) (*models.Customer, error) {
     var customer models.Customer
-    err := r.db.Where("nik = ?", nik).First(&customer).Error
+    err := r.db.Preload("Membership").Where("nik = ?", nik).First(&customer).Error
     if err != nil {
         return nil, err
     }
