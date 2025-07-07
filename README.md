@@ -97,18 +97,13 @@ A RESTful API for a car rental management system built with Go, Gin, and Postgre
    psql -U postgres -f migrations/002_add_v2_features.sql
    ```
 
-4. Insert dummy data (optional):
-   ```bash
-   psql -U postgres -d car_rental_db -f migrations/insert_dummy_data.sql
-   ```
-
-5. Create and configure the `.env` file:
+4. Create and configure the `.env` file:
    ```bash
    cp .env.example .env
    ```
    Edit `.env` with your database credentials and other settings.
 
-6. Run the application:
+5. Run the application:
    ```bash
    go run main.go
    ```
