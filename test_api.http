@@ -11,7 +11,8 @@ Content-Type: application/json
 {
     "name": "John Doe",
     "nik": "1234567890123456",
-    "phone_number": "081234567890"
+    "phone_number": "081234567890",
+    "membership_id": 1
 }
 
 ### Get Customer by ID
@@ -24,11 +25,12 @@ Content-Type: application/json
 {
     "name": "John Doe Updated",
     "nik": "1234567890123456",
-    "phone_number": "081234567899"
+    "phone_number": "081234567899",
+    "membership_id": 2
 }
 
 ### Delete Customer
-DELETE http://localhost:8080/api/v1/customers/21
+DELETE http://localhost:8080/api/v1/customers/1
 
 ### Get All Cars
 GET http://localhost:8080/api/v1/cars
@@ -43,25 +45,55 @@ Content-Type: application/json
     "daily_rent": 650000.00
 }
 
+### Get Car by ID
+GET http://localhost:8080/api/v1/cars/1
+
+### Update Car
+PUT http://localhost:8080/api/v1/cars/1
+Content-Type: application/json
+
+{
+    "name": "Honda HR-V Updated",
+    "stock": 3,
+    "daily_rent": 700000.00
+}
+
+### Delete Car
+DELETE http://localhost:8080/api/v1/cars/1
+
 ### Get Available Cars
 GET http://localhost:8080/api/v1/cars/available
 
 ### Get All Rentals
 GET http://localhost:8080/api/v1/rentals
 
-### Create Rental
+### Create Rental (Car Only)
 POST http://localhost:8080/api/v1/rentals
 Content-Type: application/json
 
 {
     "customer_id": 1,
     "car_id": 1,
-    "start_rent": "2024-01-01",
-    "end_rent": "2024-01-03"
+    "start_rent": "2025-07-07",
+    "end_rent": "2025-07-09",
+    "booking_type_id": 1
 }
 
-### Get Active Rentals
-GET http://localhost:8080/api/v1/rentals/active
+### Create Rental (Car & Driver)
+POST http://localhost:8080/api/v1/rentals
+Content-Type: application/json
+
+{
+    "customer_id": 1,
+    "car_id": 1,
+    "start_rent": "2025-07-07",
+    "end_rent": "2025-07-09",
+    "booking_type_id": 2,
+    "driver_id": 1
+}
+
+### Get Rental by ID
+GET http://localhost:8080/api/v1/rentals/1
 
 ### Update Rental (Mark as finished)
 PUT http://localhost:8080/api/v1/rentals/1
@@ -70,8 +102,125 @@ Content-Type: application/json
 {
     "customer_id": 1,
     "car_id": 1,
-    "start_rent": "2024-01-01",
-    "end_rent": "2024-01-03",
-    "total_cost": 1000000.00,
+    "start_rent": "2025-07-07",
+    "end_rent": "2025-07-09",
+    "booking_type_id": 1,
     "finished": true
 }
+
+### Delete Rental
+DELETE http://localhost:8080/api/v1/rentals/1
+
+### Get Active Rentals
+GET http://localhost:8080/api/v1/rentals/active
+
+### Get All Memberships
+GET http://localhost:8080/api/v1/memberships
+
+### Create Membership
+POST http://localhost:8080/api/v1/memberships
+Content-Type: application/json
+
+{
+    "membership_name": "Platinum",
+    "discount_planes_percentage": 20.00
+}
+
+### Get Membership by ID
+GET http://localhost:8080/api/v1/memberships/1
+
+### Update Membership
+PUT http://localhost:8080/api/v1/memberships/1
+Content-Type: application/json
+
+{
+    "membership_name": "Platinum Updated",
+    "discount_percentage": 25.00
+}
+
+### Delete Membership
+DELETE http://localhost:8080/api/v1/memberships/1
+
+### Get All Booking Types
+GET http://localhost:8080/api/v1/booking-types
+
+### Create Booking Type
+POST http://localhost:8080/api/v1/booking-types
+Content-Type: application/json
+
+{
+    "booking_type": "Car & Guide",
+    "description": "Rent a car with a guide"
+}
+
+### Get Booking Type by ID
+GET http://localhost:8080/api/v1/booking-types/1
+
+### Update Booking Type
+PUT http://localhost:8080/api/v1/booking-types/1
+Content-Type: application/json
+
+{
+    "booking_type": "Car & Guide Updated",
+    "description": "Rent a car with a guide and additional services"
+}
+
+### Delete Booking Type
+DELETE http://localhost:8080/api/v1/booking-types/1
+
+### Get All Drivers
+GET http://localhost:8080/api/v1/drivers
+
+### Create Driver
+POST http://localhost:8080/api/v1/drivers
+Content-Type: application/json
+
+{
+    "name": "Jane Smith",
+    "nik": "9876543210987654",
+    "phone_number": "081987654321",
+    "daily_cost": 200000.00
+}
+
+### Get Driver by ID
+GET http://localhost:8080/api/v1/drivers/1
+
+### Update Driver
+PUT http://localhost:8080/api/v1/drivers/1
+Content-Type: application/json
+
+{
+    "name": "Jane Smith Updated",
+    "nik": "9876543210987654",
+    "phone_number": "081987654322",
+    "daily_cost": 250000.00
+}
+
+### Delete Driver
+DELETE http://localhost:8080/api/v1/drivers/1
+
+### Get All Driver Incentives
+GET http://localhost:8080/api/v1/driver-incentives
+
+### Create Driver Incentive
+POST http://localhost:8080/api/v1/driver-incentives
+Content-Type: application/json
+
+{
+    "rental_id": 1
+}
+
+### Get Driver Incentive by ID
+GET http://localhost:8080/api/v1/driver-incentives/1
+
+### Update Driver Incentive
+PUT http://localhost:8080/api/v1/driver-incentives/1
+Content-Type: application/json
+
+{
+    "rental_id": 1,
+    "incentive": 30000.00
+}
+
+### Delete Driver Incentive
+DELETE http://localhost:8080/api/v1/driver-incentives/1
